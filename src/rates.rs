@@ -25,7 +25,7 @@ impl fmt::Display for Rate {
 }
 
 impl Rate {
-    pub fn get_rate(pair: &str) -> Rate {
+    pub fn get_rate(pair: &str) -> Option<Rate> {
         use std::io::Read;
 
         let uri = format!("{}/rate/{}", super::SHAPESHIFT_URL, pair);
@@ -36,8 +36,7 @@ impl Rate {
         let mut content = String::new();
         res.read_to_string(&mut content).unwrap();
 
-        let r: Rate = serde_json::from_str(&content).unwrap();
-        r
+        serde_json::from_str::<Rate>(&content).ok()
     }
 }
 
@@ -71,7 +70,7 @@ Miner Fee: {}",
 }
 
 impl MarketInfo {
-    pub fn get_info(pair: &str) -> MarketInfo {
+    pub fn get_info(pair: &str) -> Option<MarketInfo> {
         use std::io::Read;
 
         let uri = format!("{}/marketinfo/{}", super::SHAPESHIFT_URL, pair);
@@ -81,7 +80,6 @@ impl MarketInfo {
         let mut content = String::new();
         res.read_to_string(&mut content).unwrap();
 
-        let m: MarketInfo = serde_json::from_str(&content).unwrap();
-        m
+        serde_json::from_str::<MarketInfo>(&content).ok()
     }
 }

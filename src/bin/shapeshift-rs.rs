@@ -103,8 +103,10 @@ fn main() {
     // shapeshift-rs market-info <pair>
     if let Some(ref matches) = matches.subcommand_matches("market-info") {
         let pair = matches.value_of("pair").unwrap();
-        let response = shapeshift::rates::MarketInfo::get_info(&pair);
-        println!("{}", &response);
+        match shapeshift::rates::MarketInfo::get_info(&pair) {
+            Some(response) => println!("{}", &response),
+            None => println!("{} is not a valid pair", pair)
+        }
     }
 
     // shapeshift-rs shift [-f] <withdrawal_address> <pair> <return_address>
